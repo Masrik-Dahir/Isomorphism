@@ -21,8 +21,8 @@ def test_all_graphs(r):
     for i,j in g.items():
         for i_i, j_j in g.items():
             if (i != i_i):
-                a = (distance_matrix(j)*distance_matrix(j_j)*distance_matrix(j)).eigenvalues()
-                b = (distance_matrix(j_j)*distance_matrix(j)*distance_matrix(j_j)).eigenvalues()
+                a = [round(i, 15) for i in (distance_matrix(j)*distance_matrix(j_j)*distance_matrix(j)).eigenvalues()]
+                b = [round(i, 15) for i in (distance_matrix(j_j)*distance_matrix(j)*distance_matrix(j_j)).eigenvalues()]
                 a.sort()
                 b.sort()
                 if (a == b):
