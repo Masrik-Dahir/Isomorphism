@@ -64,8 +64,8 @@ def is_isomorphic_o(G,H):
     G_num = remove_orphan(G_copy)
     H_num = remove_orphan(H_copy)
     
-    G_ins = (distance_matrix(G_copy)*distance_matrix(H_copy)*distance_matrix(G_copy).transpose()).eigenvalues()
-    H_ins = (distance_matrix(H_copy)*distance_matrix(G_copy)*distance_matrix(H_copy).transpose()).eigenvalues()
+    G_ins = (distance_matrix(G_copy)*distance_matrix(H_copy)*distance_matrix(G_copy).transpose()*degree_matrix(G_copy)).eigenvalues()
+    H_ins = (distance_matrix(H_copy)*distance_matrix(G_copy)*distance_matrix(H_copy).transpose()*degree_matrix(H_copy)).eigenvalues()
     G_ins.sort()
     H_ins.sort()
     
