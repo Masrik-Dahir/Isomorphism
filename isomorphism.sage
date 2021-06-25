@@ -49,7 +49,7 @@ def remove_orphan(G):
     G.delete_vertices(lis)
     return num
 
-def is_isomorphic_o(G,H):
+def is_isomorphic_masrik(G,H):
     G_ds = G.degree_sequence()
     H_ds = H.degree_sequence()
     G_ds.sort()
