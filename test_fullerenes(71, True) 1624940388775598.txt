@@ -1,0 +1,2 @@
+test_fullerenes(71, True)
+Works

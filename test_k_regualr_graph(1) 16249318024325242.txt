@@ -1,0 +1,2 @@
+Tested: test_k_regualr_graph(1)
+Works

@@ -1,0 +1,4 @@
+Tested: test_k_regualr_graph(3)
+the total number of graphs for 1-regular order 3 is 0
+the total number of graphs for 2-regular order 3 is 1
+Works
