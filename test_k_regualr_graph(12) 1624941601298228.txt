@@ -1,0 +1,17 @@
+Tested: test_k_regualr_graph(12)
+the total number of graphs for 1-regular order 12 is 1
+the total number of graphs for 2-regular order 12 is 9
+the total number of graphs for 3-regular order 12 is 94
+the total number of graphs for 4-regular order 12 is 1547
+the total number of graphs for 5-regular order 12 is 7849
+the total number of graphs for 6-regular order 12 is 7849
+the total number of graphs for 7-regular order 12 is 1547
+the total number of graphs for 8-regular order 12 is 94
+the total number of graphs for 9-regular order 12 is 9
+the total number of graphs for 10-regular order 12 is 1
+the total number of graphs for 11-regular order 12 is 1
+Corrupt
+Two graphs found:
+K?Bcvb[nBUNO
+
+K?Bcv`\nFSNO
