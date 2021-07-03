@@ -351,7 +351,7 @@ def fullerenes(n,ipr_f=True, save = True, close = True):
     for g in graphs.fullerenes(n, ipr = ipr_f): #generate only fullerenes with isolted pentagons
         dic.append([g.graph6_string(), reform(g)])
         count += 1
-    news = "There are {} fullerenes graphs with {} pantagons".format(count,"isolated" if ipr_f == True else "isolated and nonisolated")
+    news = "There are {} fullerenes graphs with {} pantagons\n".format(count,"isolated" if ipr_f == True else "isolated and nonisolated")
     print(news)
     try:
         my_file.write(news)
