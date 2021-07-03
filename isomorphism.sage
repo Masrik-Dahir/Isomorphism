@@ -399,5 +399,3 @@ def fullerenes(n,ipr_f=True, save = True):
     for i in dic:
         dic_f[i[0]] = i[1]
     return dic_f
-
-fullerenes(60)
