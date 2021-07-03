@@ -21,15 +21,14 @@ def test_fullerenes(n,ipr_f=True,save=False):
     for i,j in g.items():
         for i_i, j_j in g.items():
             if (i > i_i):
-                if(is_isomorphic(j,j_j)):
-                    if(not j.is_isomorphic(j_j)):
-                        try:
-                            my_file.write("Corrupt\n")
-                            my_file.write("Two graphs found:\n"+str(i)+"\n\n"+str(i_i))
-                        except:
-                            None
-                        print("The corrupt graphs:\n"+str(i)+"\n\n"+str(i_i)+"\n")
-                        return "Corrupt"
+                if(__isomorphic__(j,j_j)):
+                    try:
+                        my_file.write("Corrupt\n")
+                        my_file.write("Two graphs found:\n"+str(i)+"\n\n"+str(i_i))
+                    except:
+                        None
+                    print("The corrupt graphs:\n"+str(i)+"\n\n"+str(i_i)+"\n")
+                    return "Corrupt"
 
     try:
         my_file.write("Works\n")
