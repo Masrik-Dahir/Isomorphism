@@ -1,0 +1,4 @@
+k_regular_graph(Order 3)
+There is no 1-regular graph for Order 3.
+the total number of 2-regular graphs for order 3 is 1
+No Duplicates for order 3

@@ -1,0 +1,3 @@
+all_graph(Order 8)
+There are 11117 connected graphs for order 8
+No Duplicates for order 8

@@ -1,0 +1,2 @@
+fullerenes(Order 72)
+There are 1 fullerenes graphs with isolated pantagonsNo Duplicates for order 72

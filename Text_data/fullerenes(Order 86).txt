@@ -1,0 +1,2 @@
+fullerenes(Order 86)
+There are 19 fullerenes graphs with isolated pantagonsNo Duplicates for order 86

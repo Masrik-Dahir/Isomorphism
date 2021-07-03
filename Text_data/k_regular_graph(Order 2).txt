@@ -1,0 +1,3 @@
+k_regular_graph(Order 2)
+the total number of 1-regular graphs for order 2 is 1
+No Duplicates for order 2

@@ -1,0 +1,2 @@
+fullerenes(Order 78)
+There are 5 fullerenes graphs with isolated pantagonsNo Duplicates for order 78

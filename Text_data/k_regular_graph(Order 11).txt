@@ -1,0 +1,12 @@
+k_regular_graph(Order 11)
+There is no 1-regular graph for Order 11.
+the total number of 2-regular graphs for order 11 is 6
+There is no 3-regular graph for Order 11.
+the total number of 4-regular graphs for order 11 is 266
+There is no 5-regular graph for Order 11.
+the total number of 6-regular graphs for order 11 is 266
+There is no 7-regular graph for Order 11.
+the total number of 8-regular graphs for order 11 is 6
+There is no 9-regular graph for Order 11.
+the total number of 10-regular graphs for order 11 is 1
+No Duplicates for order 11

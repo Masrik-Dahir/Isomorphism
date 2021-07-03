@@ -1,0 +1,2 @@
+k_regular_graph(Order 1)
+No Duplicates for order 1

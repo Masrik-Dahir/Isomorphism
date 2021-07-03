@@ -1,0 +1,6 @@
+k_regular_graph(Order 5)
+There is no 1-regular graph for Order 5.
+the total number of 2-regular graphs for order 5 is 1
+There is no 3-regular graph for Order 5.
+the total number of 4-regular graphs for order 5 is 1
+No Duplicates for order 5

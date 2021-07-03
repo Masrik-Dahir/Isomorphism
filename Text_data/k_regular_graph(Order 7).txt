@@ -1,0 +1,8 @@
+k_regular_graph(Order 7)
+There is no 1-regular graph for Order 7.
+the total number of 2-regular graphs for order 7 is 2
+There is no 3-regular graph for Order 7.
+the total number of 4-regular graphs for order 7 is 2
+There is no 5-regular graph for Order 7.
+the total number of 6-regular graphs for order 7 is 1
+No Duplicates for order 7

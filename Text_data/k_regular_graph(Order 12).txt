@@ -1,0 +1,13 @@
+k_regular_graph(Order 12)
+the total number of 1-regular graphs for order 12 is 1
+the total number of 2-regular graphs for order 12 is 9
+the total number of 3-regular graphs for order 12 is 94
+the total number of 4-regular graphs for order 12 is 1547
+the total number of 5-regular graphs for order 12 is 7849
+the total number of 6-regular graphs for order 12 is 7849
+the total number of 7-regular graphs for order 12 is 1547
+the total number of 8-regular graphs for order 12 is 94
+the total number of 9-regular graphs for order 12 is 9
+the total number of 10-regular graphs for order 12 is 1
+the total number of 11-regular graphs for order 12 is 1
+No Duplicates for order 12

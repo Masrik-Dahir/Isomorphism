@@ -1,0 +1,2 @@
+fullerenes(Order 2)
+There are a total of 0 fullerenes graphs with isolated pantagons

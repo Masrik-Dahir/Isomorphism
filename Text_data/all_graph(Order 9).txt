@@ -1,0 +1,2 @@
+all_graph(Order 9)
+There are 261080 connected graphs for order 9
