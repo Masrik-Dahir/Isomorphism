@@ -205,6 +205,7 @@ def __isomorphic__(G,H):
     return False
 
 
+
 # Takes any order and generate all k-regular graph possible
 def k_regular_graph(order, _type = "dict", save=True):
 
@@ -218,14 +219,14 @@ def k_regular_graph(order, _type = "dict", save=True):
         final_directory = os.path.join(current_directory, r'Text_data')
         if not os.path.exists(final_directory):
             os.makedirs(final_directory)
-        my_file = open("Text_data/k_regular_graph(Order %d).txt" %(int(order)), "w")
-        my_file.write("k_regular_graph(Order %d)\n" %(int(order)))
+        my_file = open("Text_data/k_regular_graph(Order {}).txt".format(int(order)), "w")
+        my_file.write("k_regular_graph(Order {})\n".format(int(order)))
 
 #       Excel
         final_directory = os.path.join(current_directory, r'Excel_data')
         if not os.path.exists(final_directory):
             os.makedirs(final_directory)
-        name = "Excel_data/k_regular_graph(Order %d)" %(int(order)) + '.csv'
+        name = "Excel_data/k_regular_graph(Order {})".format(int(order)) + '.csv'
 
     count = 0
     graph = []
@@ -237,17 +238,17 @@ def k_regular_graph(order, _type = "dict", save=True):
     for t in [1..range]:
         try:
 
-            for g in graphs.nauty_geng("%d -d%d -D%d" %(order,t,t)):
+            for g in graphs.nauty_geng("{} -d{} -D{}".format(order,t,t)):
                 count += 1
                 g6 = g.graph6_string()
                 graph.append([g6, reform(g)])
                 lis.append(reform(g))
-            print("the total number of graphs for {}-regular order {} is {}".format(t,order,count))
-            text += "the total number of graphs for {}-regular order {} is {}\n".format(t,order,count)
+            print("the total number of {}-regular graph for order {} is {}".format(t,order,count))
+            text += "the total number of {}-regular graphs for order {} is {}\n".format(t,order,count)
             count = 0
         except ValueError:
-            text += "There is no {}-regular graph with Order {}.\n".format(t,order)
-            print("There is no {}-regular graph with Order {}.".format(t,order))
+            text += "There is no {}-regular graph for Order {}.\n".format(t,order)
+            print("There is no {}-regular graph for Order {}.".format(t,order))
     try:
 #       Editing Text
         my_file.write(text)
@@ -280,8 +281,8 @@ def all_graph(ord, _type = "dict", save = True):
         final_directory = os.path.join(current_directory, r'Text_data')
         if not os.path.exists(final_directory):
             os.makedirs(final_directory)
-        my_file = open("Text_data/all_graph(Order %d).txt" %(int(ord)), "w")
-        my_file.write("all_graph(Order %d)\n" %(int(ord)))
+        my_file = open("Text_data/all_graph(Order {}).txt".format(int(ord)), "w")
+        my_file.write("all_graph(Order {})\n".format(int(ord)))
 
 #       Excel
         final_directory = os.path.join(current_directory, r'Excel_data')
@@ -294,20 +295,18 @@ def all_graph(ord, _type = "dict", save = True):
     dictionary_f = {}
     lis = []
 
-
-
     dictionary.append(["Graph String Name", "Masrik Form of Adjacency Matrix"])
-    for g in graphs.nauty_geng("%d -c" %(ord)):
+    for g in graphs.nauty_geng("{} -c".format(ord)):
         dictionary.append([g.graph6_string(), reform(g)])
 
 
         count = count +1
         lis.append(reform(g))
-    print("There are a total of %d connected graphs for order %d\n" %(count, ord))
+    print("There are {}} connected graphs for order {}\n".format(count, ord))
     if (_type == "dict"):
         try:
 #           Editing Test
-            my_file.write("There are a total of %d connected graphs for order %d\n" %(count, ord))
+            my_file.write("There are {} connected graphs for order {}\n".format(count, ord))
 
 #           Editing Excel
             with open(name, 'w', newline='') as file:
@@ -318,9 +317,10 @@ def all_graph(ord, _type = "dict", save = True):
         for i in dictionary:
             dictionary_f[i[0]] = i[1]
         return dictionary_f
+
     elif (_type == "list"):
         try:
-            my_file.write("There are a total of %d connected graphs for order %d\n" %(count, ord))
+            my_file.write("There are {} connected graphs for order {}\n".format(count, ord))
             my_file.close()
         except:
             None
@@ -328,6 +328,45 @@ def all_graph(ord, _type = "dict", save = True):
     else:
         return "Either pick \"dict\" for dictionary or \"list\" for list"
 
+def fullerenes(n,ipr_f=True, save = True, close = True):
+    my_file = None
+    name = None
+    current_directory = os.getcwd()
+    if (save == True):
+#       Text
+        final_directory = os.path.join(current_directory, r'Text_data')
+        if not os.path.exists(final_directory):
+            os.makedirs(final_directory)
+        my_file = open("Text_data/fullerenes(Order {}).txt".format(int(n)), "w")
+        my_file.write("fullerenes(Order {})\n".format(int(n)))
+
+#       Excel
+        final_directory = os.path.join(current_directory, r'Excel_data')
+        if not os.path.exists(final_directory):
+            os.makedirs(final_directory)
+        name = 'Excel_data/' + str("fullerenes(Order ") + str(n) + ")" + '.csv'
+
+    count = 0
+    dic = []
+    for g in graphs.fullerenes(n, ipr = ipr_f): #generate only fullerenes with isolted pentagons
+        dic.append([g.graph6_string(), reform(g)])
+        count += 1
+    news = "There are {} fullerenes graphs with {} pantagons".format(count,"isolated" if ipr_f == True else "isolated and nonisolated")
+    print(news)
+    try:
+        my_file.write(news)
+        if close:
+            my_file.close()
+
+        with open(name, 'w', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerows(dic)
+    except:
+        None
+    dic_f = {}
+    for i in dic:
+        dic_f[i[0]] = i[1]
+    return dic_f
 
 # Confirming if a list has any duplicate values
 def is_duplicate(order, lis):
@@ -348,46 +387,31 @@ def is_duplicate(order, lis):
                 if j in res:
                     ind = res.index(j)
                     other = pes[ind]
-                return "Duplicates Exist for order %d-\n%s \n%s" %(order,i, other)
+                return "Duplicates Exist for order {}-\n{} \n{}".format(order,i, other)
 
 
-    return "No Duplicates for order %d" %(order)
+    return "No Duplicates for order {}".format(order)
 
-def fullerenes(n,ipr_f=True, save = True):
-    my_file = None
-    name = None
-    current_directory = os.getcwd()
-    if (save == True):
-#       Text
-        final_directory = os.path.join(current_directory, r'Text_data')
-        if not os.path.exists(final_directory):
-            os.makedirs(final_directory)
-        my_file = open("Text_data/fullerenes(Order %d).txt" %(int(n)), "w")
-        my_file.write("fullerenes(Order %d)\n" %(int(n)))
+def test_all_graph(order):
+    name = "Text_data/all_graph(Order {}).txt".format(order)
+    text = is_duplicate(order, all_graph(order))
+    my_file = open("Text_data/all_graph(Order {}).txt".format(order), "a")
+    with my_file as f:
+        f.write(text)
+    return text
 
-#       Excel
-        final_directory = os.path.join(current_directory, r'Excel_data')
-        if not os.path.exists(final_directory):
-            os.makedirs(final_directory)
-        name = 'Excel_data/' + str("fullerenes(Order ") + str(n) + ")" + '.csv'
+def test_k_regular_graph(order):
+    name = "Text_data/all_graph(Order {}).txt".format(order)
+    text = is_duplicate(order, k_regular_graph(order))
+    my_file = open("Text_data/k_regular_graph(Order {}).txt".format(order), "a")
+    with my_file as f:
+        f.write(text)
+    return text
 
-    count = 0
-    dic = []
-    for g in graphs.fullerenes(n, ipr = ipr_f): #generate only fullerenes with isolted pentagons
-        dic.append([g.graph6_string(), reform(g)])
-        count += 1
-    news = "There are a total of %d fullerenes graphs with %s pantagons" %(count,"isolated" if ipr_f == True else "isolated and nonisolated")
-    print(news)
-    try:
-        my_file.write(news)
-        my_file.close()
-
-        with open(name, 'w', newline='') as file:
-                writer = csv.writer(file)
-                writer.writerows(dic)
-    except:
-        None
-    dic_f = {}
-    for i in dic:
-        dic_f[i[0]] = i[1]
-    return dic_f
+def test_fullerenes_graph(order):
+    name = "Text_data/fullerenes(Order {}).txt".format(order)
+    text = is_duplicate(order, fullerenes(order))
+    my_file = open("Text_data/fullerenes(Order {}).txt".format(order), "a")
+    with my_file as f:
+        f.write(text)
+    return text
