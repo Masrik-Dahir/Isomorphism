@@ -206,60 +206,58 @@ def __isomorphic__(G,H):
 
 
 # Takes any order and generate all k-regular graph possible
-def k_regular_graph(order, _type = "dict", my_file=True):
+def k_regular_graph(order, _type = "dict", save=True):
 
     my_file = None
     name = None
     current_directory = os.getcwd()
+    text = ""
 
     if (save == True):
 #       Text
         final_directory = os.path.join(current_directory, r'Text_data')
         if not os.path.exists(final_directory):
             os.makedirs(final_directory)
-        my_file = open("Text_data/all_graph(%d).txt" %(int(ord)), "w")
-        my_file.write("all_graph(%d)\n" %(int(ord)))
+        my_file = open("Text_data/k_regular_graph(Order %d).txt" %(int(order)), "w")
+        my_file.write("k_regular_graph(Order %d)\n" %(int(order)))
 
 #       Excel
         final_directory = os.path.join(current_directory, r'Excel_data')
         if not os.path.exists(final_directory):
             os.makedirs(final_directory)
-        name = 'Excel_data/' + str("k_regular_graph(") + str(order) + ")" + '.csv'
+        name = "Excel_data/k_regular_graph(Order %d)" %(int(order)) + '.csv'
 
     count = 0
-    graph = {}
+    graph = []
     dis_sp_list = []
     dis_sp_dict = {}
     lis = []
     range = order-1
+    graph.append(["Graph String Name", "Masrik Form of adjacency matrix"])
     for t in [1..range]:
         try:
-            graph.append(["Graph String Name", "Masrik Form of adjacency matrix"])
+
             for g in graphs.nauty_geng("%d -d%d -D%d" %(order,t,t)):
                 count += 1
                 g6 = g.graph6_string()
                 graph.append([g6, reform(g)])
                 lis.append(reform(g))
             print("the total number of graphs for {}-regular order {} is {}".format(t,order,count))
-
-            try:
-                my_file.write("the total number of graphs for {}-regular order {} is {}\n".format(t,order,count))
-            except:
-                None
+            text += "the total number of graphs for {}-regular order {} is {}\n".format(t,order,count)
             count = 0
         except ValueError:
-            try:
-#               Editing Text
-                my_file.write("the total number of graphs for {}-regular order {} is {}\n".format(t,order,count))
-                my_file.close()
-
-#               Editing Excel
-                with open(name, 'w', newline='') as file:
-                    writer = csv.writer(file)
-                    writer.writerows(graph)
-            except:
-                None
+            text += "There is no {}-regular graph with Order {}.\n".format(t,order)
             print("There is no {}-regular graph with Order {}.".format(t,order))
+    try:
+#       Editing Text
+        my_file.write(text)
+        my_file.close()
+#       Editing Excel
+        with open(name, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerows(graph)
+    except:
+        None
     if _type == "dict":
         dictionary_f = {}
         for i in graph:
@@ -282,23 +280,26 @@ def all_graph(ord, _type = "dict", save = True):
         final_directory = os.path.join(current_directory, r'Text_data')
         if not os.path.exists(final_directory):
             os.makedirs(final_directory)
-        my_file = open("Text_data/all_graph(%d).txt" %(int(ord)), "w")
-        my_file.write("all_graph(%d)\n" %(int(ord)))
+        my_file = open("Text_data/all_graph(Order %d).txt" %(int(ord)), "w")
+        my_file.write("all_graph(Order %d)\n" %(int(ord)))
 
 #       Excel
         final_directory = os.path.join(current_directory, r'Excel_data')
         if not os.path.exists(final_directory):
             os.makedirs(final_directory)
-        name = 'Excel_data/' + str("all_graph(") + str(ord) + ")" + '.csv'
+        name = 'Excel_data/' + str("all_graph(Order ") + str(ord) + ")" + '.csv'
 
     count = 0
     dictionary = []
     dictionary_f = {}
     lis = []
 
+
+
     dictionary.append(["Graph String Name", "Masrik Form of Adjacency Matrix"])
     for g in graphs.nauty_geng("%d -c" %(ord)):
         dictionary.append([g.graph6_string(), reform(g)])
+
 
         count = count +1
         lis.append(reform(g))
