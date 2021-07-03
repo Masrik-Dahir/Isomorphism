@@ -342,7 +342,10 @@ def is_duplicate(lis):
             else:
                 return "Duplicates Exist"
     elif (isinstance(lis, dict)):
-        r = lis[list(lis.keys())[1]].nrows()
+        if len(lis) > 1:
+            r = lis[list(lis.keys())[1]].nrows()
+        else:
+            r = 1
 
         for i,j in lis.items():
             if j not in res:
