@@ -302,7 +302,7 @@ def all_graph(ord, _type = "dict", save = True):
 
         count = count +1
         lis.append(reform(g))
-    print("There are {}} connected graphs for order {}\n".format(count, ord))
+    print("There are {} connected graphs for order {}\n".format(count, ord))
     if (_type == "dict"):
         try:
 #           Editing Test
