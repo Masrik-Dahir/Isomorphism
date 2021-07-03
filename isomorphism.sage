@@ -330,22 +330,19 @@ def all_graph(ord, _type = "dict", save = True):
 
 
 # Confirming if a list has any duplicate values
-def is_duplicate(lis):
+def is_duplicate(G, lis):
     res = []
     pes = []
     order = -1
     if (isinstance(lis, list)):
-        order = lis[0].nrows()
+        order = G.order()
         for i in lis:
             if i not in res:
                 res.append(i)
             else:
                 return "Duplicates Exist"
     elif (isinstance(lis, dict)):
-        if len(lis) > 1:
-            r = lis[list(lis.keys())[1]].nrows()
-        else:
-            r = 1
+        order = G.order()
 
         for i,j in lis.items():
             if j not in res:
