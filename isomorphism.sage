@@ -1,6 +1,7 @@
 # Helper graphs
 # Masrik's degree matrix
-import time
+import os
+import csv
 
 def degree_matrix(G):
     a = []
@@ -203,40 +204,44 @@ def __isomorphic__(G,H):
             return True
     return False
 
-#generate all non-isomorphic connect graphs with order n
-def engine(ord):
-    count = 0
-    dictionary = {}
-    lis = []
-
-    for g in graphs.nauty_geng("%d -c" %(ord)):
-        dictionary[str(g.graph6_string())] = g
-        count = count +1
-    print("There are a total of %d connected graphs" %(count))
-
-    for i, j in dictionary.items():
-        for m, n in dictionary.items():
-            if m != i:
-                if __isomorphic__(j,n):
-                    print(i)
-                    print(m)
-                    return "Error"
-    return "works"
 
 # Takes any order and generate all k-regular graph possible
-def k_regular_graph(order,my_file=None):
+def k_regular_graph(order, _type = "dict", my_file=True):
+
+    my_file = None
+    name = None
+    current_directory = os.getcwd()
+
+    if (save == True):
+#       Text
+        final_directory = os.path.join(current_directory, r'Text_data')
+        if not os.path.exists(final_directory):
+            os.makedirs(final_directory)
+        my_file = open("Text_data/all_graph(%d).txt" %(int(ord)), "w")
+        my_file.write("all_graph(%d)\n" %(int(ord)))
+
+#       Excel
+        final_directory = os.path.join(current_directory, r'Excel_data')
+        if not os.path.exists(final_directory):
+            os.makedirs(final_directory)
+        name = 'Excel_data/' + str("k_regular_graph(") + str(order) + ")" + '.csv'
+
     count = 0
     graph = {}
     dis_sp_list = []
     dis_sp_dict = {}
+    lis = []
     range = order-1
     for t in [1..range]:
         try:
+            graph.append(["Graph String Name", "Masrik Form of adjacency matrix"])
             for g in graphs.nauty_geng("%d -d%d -D%d" %(order,t,t)):
                 count += 1
                 g6 = g.graph6_string()
-                graph[g6] = g
+                graph.append([g6, reform(g)])
+                lis.append(reform(g))
             print("the total number of graphs for {}-regular order {} is {}".format(t,order,count))
+
             try:
                 my_file.write("the total number of graphs for {}-regular order {} is {}\n".format(t,order,count))
             except:
@@ -244,74 +249,110 @@ def k_regular_graph(order,my_file=None):
             count = 0
         except ValueError:
             try:
+#               Editing Text
                 my_file.write("the total number of graphs for {}-regular order {} is {}\n".format(t,order,count))
+                my_file.close()
+
+#               Editing Excel
+                with open(name, 'w', newline='') as file:
+                    writer = csv.writer(file)
+                    writer.writerows(graph)
             except:
                 None
             print("There is no {}-regular graph with Order {}.".format(t,order))
-    return graph
+    if _type == "dict":
+        dictionary_f = {}
+        for i in graph:
+            dictionary_f[i[0]] = i[1]
+        return dictionary_f
+    elif _type == "list":
+        return lis
+    else:
+        return "Either pick \"dict\" for dictionary or \"list\" for list"
 
-# testting if all k-regular graph are isomorphic or not using my properties for order n
-def test_k_regular_graph(r, save=False):
+
+
+# Finding all_graph for order n
+def all_graph(ord, _type = "dict", save = True):
     my_file = None
+    name = None
+    current_directory = os.getcwd()
     if (save == True):
-        name = str(time.time()).replace(".","")
-        my_file = open("test_k_regular_graph\test_k_regualr_graph("+str(r)+") "+name + ".txt", "w")
-        my_file.write("Tested: test_k_regualr_graph("+str(r)+")\n")
+#       Text
+        final_directory = os.path.join(current_directory, r'Text_data')
+        if not os.path.exists(final_directory):
+            os.makedirs(final_directory)
+        my_file = open("Text_data/all_graph(%d).txt" %(int(ord)), "w")
+        my_file.write("all_graph(%d)\n" %(int(ord)))
 
-    g = k_regular_graph(r,my_file)
-    for i,j in g.items():
-        for i_i, j_j in g.items():
-            if (i > i_i):
-                if __isomorphic__(j,j_j):
-                    try:
-                        my_file.write("Corrupt\n")
-                        my_file.write("Two graphs found:\n"+str(i)+"\n\n"+str(i_i))
-                    except:
-                        None
-                    print("Two graphs found:\n"+str(i)+"\n\n"+str(i_i))
-                    return "corrupt" + "\nTwo graphs found:\n"+str(i)+"\n\n"+str(i_i)
-    try:
-        my_file.write("Works")
-    except:
-        None
-    return "Works"
-
-# What if we have to include the degree matrix to make out hypothesis a success!
-# testting if all graph are isomorphic or not using my properties for order n
-#generate all non-isomorphic connect graphs with order n
-def test_all_graph(ord,save = False):
-    if (save == True):
-        name = str(time.time()).replace(".","")
-        my_file = open("test_all_graph\test_all_graph("+str(ord)+") "+name + ".txt", "w")
-        my_file.write("Tested: test_all_graph("+str(ord)+")\n")
+#       Excel
+        final_directory = os.path.join(current_directory, r'Excel_data')
+        if not os.path.exists(final_directory):
+            os.makedirs(final_directory)
+        name = 'Excel_data/' + str("all_graph(") + str(ord) + ")" + '.csv'
 
     count = 0
-    dictionary = {}
+    dictionary = []
+    dictionary_f = {}
     lis = []
 
+    dictionary.append(["Graph String Name", "Masrik Form of Adjacency Matrix"])
     for g in graphs.nauty_geng("%d -c" %(ord)):
-        dictionary[str(g.graph6_string())] = g
-        count = count +1
-    print("There are a total of %d connected graphs" %(count))
-    try:
-        my_file.write("There are a total of %d connected graphs\n" %(count))
-    except:
-        None
+        dictionary.append([g.graph6_string(), reform(g)])
 
-    for i, j in dictionary.items():
-        for i_i, j_j in dictionary.items():
-            if (i > i_i):
-                if __isomorphic__(j,j_j):
-                    try:
-                        my_file.write("Corrupt\n")
-                        my_file.write("Two graphs found:\n"+str(i)+"\n\n"+str(i_i))
-                    except:
-                        None
-                    print("Two graphs found:\n"+str(i)+"\n\n"+str(i_i))
-                    return "corrupt" + "\nTwo graphs found:\n"+str(i)+"\n\n"+str(i_i)
-    try:
-        my_file.write("Works")
-    except:
-        None
-    return "works"
+        count = count +1
+        lis.append(reform(g))
+    print("There are a total of %d connected graphs for order %d\n" %(count, ord))
+    if (_type == "dict"):
+        try:
+#           Editing Test
+            my_file.write("There are a total of %d connected graphs for order %d\n" %(count, ord))
+
+#           Editing Excel
+            with open(name, 'w', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerows(dictionary)
+        except:
+            None
+        for i in dictionary:
+            dictionary_f[i[0]] = i[1]
+        return dictionary_f
+    elif (_type == "list"):
+        try:
+            my_file.write("There are a total of %d connected graphs for order %d\n" %(count, ord))
+            my_file.close()
+        except:
+            None
+        return lis
+    else:
+        return "Either pick \"dict\" for dictionary or \"list\" for list"
+
+
+# Confirming if a list has any duplicate values
+def is_duplicate(lis):
+    res = []
+    pes = []
+    order = -1
+    if (isinstance(lis, list)):
+        order = lis[0].nrows()
+        for i in lis:
+            if i not in res:
+                res.append(i)
+            else:
+                return "Duplicates Exist"
+    elif (isinstance(lis, dict)):
+        r = lis[list(lis.keys())[1]].nrows()
+
+        for i,j in lis.items():
+            if j not in res:
+                res.append(j)
+                pes.append(i)
+            else:
+                if j in res:
+                    ind = res.index(j)
+                    other = pes[ind]
+                return "Duplicates Exist for order %d-\n%s \n%s" %(r,i, other)
+
+
+    return "No Duplicates for order %d" %(r)
 
