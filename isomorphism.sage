@@ -43,20 +43,164 @@ def distance_matrix(G):
     M = matrix(ZZ,a)
     return M
 
-# Masrik's is_isomorphic()
-def is_isomorphic(G,H):
+def adj_to_graph(gr):
+    rows_num = 0
+    G = Graph(gr.nrows())
+    for i in gr:
+        rows = list(i)
+        for j in range(0,len(rows)):
+            if (rows_num != j and rows[j] == 1):
+                G.add_edge(rows_num,j)
+        rows_num += 1
 
+    return G
+
+def switch(adj,a,b):
+    if (adj.nrows() >= a and adj.nrows() >= b):
+        new_list = []
+        res = []
+
+        higher_num = (a if a > b else b) -1
+        higher_num_list = list(adj[higher_num])
+
+        lower_num = (b if a > b else a) -1
+        lower_num_list = list(adj[lower_num])
+
+        for i in range (0, adj.nrows()):
+            rows = list(adj[i])
+            if i == lower_num:
+                new_list.append(higher_num_list)
+            elif i == higher_num:
+                new_list.append(lower_num_list)
+            else:
+                new_list.append(rows)
+
+        for rows in new_list:
+            lower_list = []
+            for j in range(0,len(rows)):
+                if j == lower_num:
+                    lower_list.append(rows[higher_num])
+
+                elif j == higher_num:
+                    lower_list.append(rows[lower_num])
+                else:
+                    lower_list.append(rows[j])
+
+            res.append(lower_list)
+
+        M = matrix(ZZ,res)
+    return M
+
+def compare(adj,a,b):
+    if (adj.nrows() >= a and adj.nrows() >= b and a >= 1 and b >= 1):
+        lower_num = (b if a>b else a) -1
+        lower_num_list = list(adj[lower_num])
+
+        higher_num = (a if a>b else b) -1
+        higher_num_list = list(adj[higher_num])
+        higher_num_list_updated = []
+
+
+        for i in range(0, len(higher_num_list)):
+            if i == higher_num:
+                higher_num_list_updated.append(higher_num_list[lower_num])
+            elif i == lower_num:
+                higher_num_list_updated.append(higher_num_list[higher_num])
+            else:
+                higher_num_list_updated.append(higher_num_list[i])
+
+        single_higher_num = int(''.join(map(str,higher_num_list_updated)))
+        single_lower_num = int(''.join(map(str,lower_num_list)))
+
+        if (single_higher_num > single_lower_num):
+            return True
+        else:
+            return False
+
+    elif adj.nrows() < a or a < 1:
+        return "Invalid rows number for the second second parameter. The dimension of the matrix is %dx%d" %(adj.nrows(),adj.ncols())
+    elif adj.nrows() < b or b < 1:
+        return "Invalid rows number for the third second parameter. The dimension of the matrix is %dx%d" %(adj.nrows(),adj.ncols())
+
+
+def reform(G):
+    V = G.order()
+    adj = G.adjacency_matrix()
+
+    for i in range(1,V+1):
+        for j in range(1,V+1):
+            if compare(adj, j,i):
+                adj = switch(adj, j,i)
+            else:
+                None
+    return adj
+
+def remove_orphan(G):
+    V_G = G.vertices()
+    E_G = G.edges()
+
+    lis =[]
+    for v in V_G:
+        if G.degree(v) == 0:
+            lis.append(v)
+    num = len(lis)
+    G.delete_vertices(lis)
+    return num
+
+def to_subgraph(G_copy):
+    from sage.graphs.connectivity import connected_components_subgraphs
+    remove_orphan(G_copy)
+    L = connected_components_subgraphs(G_copy)
+    lis = graphs_list.to_graph6(L).split("\n")
+    for i in lis:
+        if str(i) == "":
+            lis.remove(i)
+    graphs = []
+    for i in lis:
+        graphs.append(Graph(i))
+
+    return graphs
+
+def __isomorphic__(G,H):
     G_copy = G.copy()
     H_copy = H.copy()
 
+    if (G.order() != H.order() or G.size() != H.size() or G.degree_sequence() != H.degree_sequence() or
+       G.is_directed() != H.is_directed()):
+        return False
 
-    G_ins = (distance_matrix(G_copy)*distance_matrix(H_copy)*distance_matrix(G_copy).transpose()*degree_matrix(G_copy)).eigenvalues()
-    H_ins = (distance_matrix(H_copy)*distance_matrix(G_copy)*distance_matrix(H_copy).transpose()*degree_matrix(H_copy)).eigenvalues()
-    G_ins.sort()
-    H_ins.sort()
-
-    if (G_ins == H_ins):
+    if ((G.order()*(G.order()-1))/2 == G.size()):
         return True
+
+    G_num = remove_orphan(G_copy)
+    H_num = remove_orphan(H_copy)
+
+    if (G_num != H_num):
+        return False
+
+    else:
+
+        G_subgraphs = to_subgraph(G_copy)
+        H_subgraphs = to_subgraph(H_copy)
+
+        G_adj_list = []
+        H_adj_list = []
+
+        for i in G_subgraphs:
+            G_adj_list.append(reform(i))
+
+        for i in H_subgraphs:
+            H_adj_list.append(reform(i))
+
+        res = []
+        for i in G_adj_list:
+            if i in H_adj_list:
+                res.append(i)
+                H_adj_list.remove(i)
+
+
+        if G_adj_list == res and len(H_adj_list) == 0:
+            return True
     return False
 
 #generate all non-isomorphic connect graphs with order n
@@ -73,7 +217,7 @@ def engine(ord):
     for i, j in dictionary.items():
         for m, n in dictionary.items():
             if m != i:
-                if is_isomorphic(j,n):
+                if __isomorphic__(j,n):
                     print(i)
                     print(m)
                     return "Error"
@@ -111,18 +255,14 @@ def test_k_regular_graph(r, save=False):
     my_file = None
     if (save == True):
         name = str(time.time()).replace(".","")
-        my_file = open("test_k_regualr_graph("+str(r)+") "+name + ".txt", "w")
+        my_file = open("test_k_regular_graph\test_k_regualr_graph("+str(r)+") "+name + ".txt", "w")
         my_file.write("Tested: test_k_regualr_graph("+str(r)+")\n")
 
     g = k_regular_graph(r,my_file)
     for i,j in g.items():
         for i_i, j_j in g.items():
             if (i > i_i):
-                a = (distance_matrix(j)*distance_matrix(j_j)*distance_matrix(j)).eigenvalues()
-                b = (distance_matrix(j_j)*distance_matrix(j)*distance_matrix(j_j)).eigenvalues()
-                a.sort()
-                b.sort()
-                if (a == b):
+                if __isomorphic__(j,j_j):
                     try:
                         my_file.write("Corrupt\n")
                         my_file.write("Two graphs found:\n"+str(i)+"\n\n"+str(i_i))
@@ -142,7 +282,7 @@ def test_k_regular_graph(r, save=False):
 def test_all_graph(ord,save = False):
     if (save == True):
         name = str(time.time()).replace(".","")
-        my_file = open("test_all_graph("+str(ord)+") "+name + ".txt", "w")
+        my_file = open("test_all_graph\test_all_graph("+str(ord)+") "+name + ".txt", "w")
         my_file.write("Tested: test_all_graph("+str(ord)+")\n")
 
     count = 0
@@ -161,11 +301,7 @@ def test_all_graph(ord,save = False):
     for i, j in dictionary.items():
         for i_i, j_j in dictionary.items():
             if (i > i_i):
-                a = (distance_matrix(j)*distance_matrix(j_j)*distance_matrix(j)*degree_matrix(j)).eigenvalues()
-                b = (distance_matrix(j_j)*distance_matrix(j)*distance_matrix(j_j)*degree_matrix(j_j)).eigenvalues()
-                a.sort()
-                b.sort()
-                if (a == b):
+                if __isomorphic__(j,j_j):
                     try:
                         my_file.write("Corrupt\n")
                         my_file.write("Two graphs found:\n"+str(i)+"\n\n"+str(i_i))
@@ -179,70 +315,3 @@ def test_all_graph(ord,save = False):
         None
     return "works"
 
-# Let's try with adjacency matrix
-def test_all_graph_adj(ord,save=False):
-    if (save == True):
-        name = str(time.time()).replace(".","")
-        my_file = open("test_all_graph_adj("+str(ord)+") " + name + ".txt", "w")
-        my_file.write("Tested: test_all_graph_adj("+str(ord)+")\n")
-    count = 0
-    dictionary = {}
-    lis = []
-
-    for g in graphs.nauty_geng("%d -c" %(ord)):
-        dictionary[str(g.graph6_string())] = g
-        count = count +1
-    print("There are a total of %d connected graphs" %(count))
-    try:
-        my_file.write("There are a total of %d connected graphs\n" %(count))
-    except:
-        None
-
-    for i, j in dictionary.items():
-        for i_i, j_j in dictionary.items():
-            if (i > i_i):
-                a = (j.adjacency_matrix()*j_j.adjacency_matrix()*j.adjacency_matrix()*degree_matrix(j)).eigenvalues()
-                b = (j_j.adjacency_matrix()*j.adjacency_matrix()*j_j.adjacency_matrix()*degree_matrix(j_j)).eigenvalues()
-                a.sort()
-                b.sort()
-                if (a == b):
-                    try:
-                        my_file.write("Corrupt\n")
-                        my_file.write("Two graphs found:\n"+str(i)+"\n\n"+str(i_i))
-                    except:
-                        None
-                    print("Two graphs found:\n"+str(i)+"\n\n"+str(i_i))
-                    return "corrupt" + "\nTwo graphs found:\n"+str(i)+"\n\n"+str(i_i)
-    try:
-        my_file.write("Works")
-    except:
-        None
-    return "works"
-
-def test_k_regular_graph_adj(r,save = False):
-    my_file = None
-    if (save == True):
-        name = str(time.time()).replace(".","")
-        my_file = open("Tested: test_k_regualr_graph_adj("+str(r)+") "+name + ".txt", "w")
-        my_file.write("Tested: test_k_regualr_graph_adj("+str(r)+")\n")
-    
-    g = k_regular_graph(r,my_file)
-        
-    for i,j in g.items():
-        for i_i, j_j in g.items():
-            if (i > i_i):
-                a = (j.adjacency_matrix()*j_j.adjacency_matrix()*j.adjacency_matrix()*degree_matrix(j)).eigenvalues()
-                b = (j_j.adjacency_matrix()*j.adjacency_matrix()*j_j.adjacency_matrix()*degree_matrix(j_j)).eigenvalues()
-                a.sort()
-                b.sort()
-                try:
-                    my_file.write("Corrupt\n")
-                    my_file.write("Two graphs found:\n"+str(i)+"\n\n"+str(i_i))
-                except:
-                    None
-                return "corrupt" + "\nTwo graphs found:\n"+str(i)+"\n\n"+str(i_i)
-    try:
-        my_file.write("Works")
-    except:
-        None
-    return "Works"

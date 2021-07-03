@@ -1,5 +1,0 @@
-Tested: test_k_regualr_graph(4)
-the total number of graphs for 1-regular order 4 is 1
-the total number of graphs for 2-regular order 4 is 1
-the total number of graphs for 3-regular order 4 is 1
-Works

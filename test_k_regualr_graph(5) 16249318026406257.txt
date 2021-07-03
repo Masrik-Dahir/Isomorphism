@@ -1,6 +1,0 @@
-Tested: test_k_regualr_graph(5)
-the total number of graphs for 1-regular order 5 is 0
-the total number of graphs for 2-regular order 5 is 1
-the total number of graphs for 3-regular order 5 is 0
-the total number of graphs for 4-regular order 5 is 1
-Works

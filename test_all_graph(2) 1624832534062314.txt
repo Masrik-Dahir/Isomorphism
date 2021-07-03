@@ -1,3 +1,0 @@
-Tested: test_all_graph(2)
-There are a total of 1 connected graphs
-Works

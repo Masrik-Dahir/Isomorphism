@@ -1,2 +1,0 @@
-test_fullerenes(80, True)
-Works
