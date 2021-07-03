@@ -330,20 +330,16 @@ def all_graph(ord, _type = "dict", save = True):
 
 
 # Confirming if a list has any duplicate values
-def is_duplicate(G, lis):
+def is_duplicate(order, lis):
     res = []
     pes = []
-    order = -1
     if (isinstance(lis, list)):
-        order = G.order()
         for i in lis:
             if i not in res:
                 res.append(i)
             else:
                 return "Duplicates Exist"
     elif (isinstance(lis, dict)):
-        order = G.order()
-
         for i,j in lis.items():
             if j not in res:
                 res.append(j)
@@ -352,10 +348,10 @@ def is_duplicate(G, lis):
                 if j in res:
                     ind = res.index(j)
                     other = pes[ind]
-                return "Duplicates Exist for order %d-\n%s \n%s" %(r,i, other)
+                return "Duplicates Exist for order %d-\n%s \n%s" %(order,i, other)
 
 
-    return "No Duplicates for order %d" %(r)
+    return "No Duplicates for order %d" %(order)
 
 def fullerenes(n,ipr_f=True, save = True):
     my_file = None
