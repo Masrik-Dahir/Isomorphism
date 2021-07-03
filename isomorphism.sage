@@ -369,18 +369,19 @@ def fullerenes(n,ipr_f=True, save = True):
         final_directory = os.path.join(current_directory, r'Text_data')
         if not os.path.exists(final_directory):
             os.makedirs(final_directory)
-        my_file = open("Text_data/fullerenes(Order %d).txt" %(int(ord)), "w")
-        my_file.write("fullerenes(Order %d)\n" %(int(ord)))
+        my_file = open("Text_data/fullerenes(Order %d).txt" %(int(n)), "w")
+        my_file.write("fullerenes(Order %d)\n" %(int(n)))
 
 #       Excel
         final_directory = os.path.join(current_directory, r'Excel_data')
         if not os.path.exists(final_directory):
             os.makedirs(final_directory)
-        name = 'Excel_data/' + str("fullerenes(Order ") + str(ord) + ")" + '.csv'
+        name = 'Excel_data/' + str("fullerenes(Order ") + str(n) + ")" + '.csv'
 
     count = 0
     dic = []
     for g in graphs.fullerenes(n, ipr = ipr_f): #generate only fullerenes with isolted pentagons
+        g.show()
         dic.append([g.graph6_string(), reform(g)])
         count += 1
     news = "There are a total of %d fullerenes graphs with %s pantagons" %(count,"isolated" if ipr_f == True else "isolated and nonisolated")
@@ -398,3 +399,5 @@ def fullerenes(n,ipr_f=True, save = True):
     for i in dic:
         dic_f[i[0]] = i[1]
     return dic_f
+
+fullerenes(60)
