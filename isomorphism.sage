@@ -360,3 +360,41 @@ def is_duplicate(lis):
 
     return "No Duplicates for order %d" %(r)
 
+def fullerenes(n,ipr_f=True, save = True):
+    my_file = None
+    name = None
+    current_directory = os.getcwd()
+    if (save == True):
+#       Text
+        final_directory = os.path.join(current_directory, r'Text_data')
+        if not os.path.exists(final_directory):
+            os.makedirs(final_directory)
+        my_file = open("Text_data/fullerenes(Order %d).txt" %(int(ord)), "w")
+        my_file.write("fullerenes(Order %d)\n" %(int(ord)))
+
+#       Excel
+        final_directory = os.path.join(current_directory, r'Excel_data')
+        if not os.path.exists(final_directory):
+            os.makedirs(final_directory)
+        name = 'Excel_data/' + str("fullerenes(Order ") + str(ord) + ")" + '.csv'
+
+    count = 0
+    dic = []
+    for g in graphs.fullerenes(n, ipr = ipr_f): #generate only fullerenes with isolted pentagons
+        dic.append([g.graph6_string(), reform(g)])
+        count += 1
+    news = "There are a total of %d fullerenes graphs with %s pantagons" %(count,"isolated" if ipr_f == True else "isolated and nonisolated")
+    print(news)
+    try:
+        my_file.write(news)
+        my_file.close()
+
+        with open(name, 'w', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerows(dic)
+    except:
+        None
+    dic_f = {}
+    for i in dic:
+        dic_f[i[0]] = i[1]
+    return dic_f
