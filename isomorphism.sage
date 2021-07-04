@@ -3,6 +3,46 @@
 import os
 import csv
 
+def sqare_matrix(G):
+    G_M = G.incidence_matrix()
+    G_rows = G_M.nrows()
+    G_cols = G_M.ncols()
+
+    H_rows = H_M.nrows()
+    H_cols = H_M.ncols()
+
+
+    a = []
+    continu = True
+    G_M_2 = []
+    for i in G_M.rows():
+        a.append(list(i))
+
+    if (G_rows < G_cols):
+        diff = G_cols - G_rows
+
+        while (continu):
+            t = []
+            for i in range(0,G_cols):
+                t.append(1)
+            a.append(t)
+            G_M_2 = matrix(ZZ,a)
+            if (G_M_2.nrows() == G_M_2.ncols()):
+                continu = False
+    elif (G_rows > G_cols):
+        diff = G_rows - G_cols
+
+        while (continu):
+            t = []
+            for j in a:
+                for i in range(0,diff):
+                    j.append(1)
+
+            G_M_2 = matrix(ZZ,a)
+            if (G_M_2.nrows() == G_M_2.ncols()):
+                continu = False
+    return G_M_2
+
 def degree_matrix(G):
     a = []
     length = len(G.vertices())
